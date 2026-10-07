@@ -524,6 +524,13 @@ int main(int argc, char *argv[])
         const QString config =
             QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);
 
+        QString cacheLocation;
+#ifdef IMAGER_PORTABLE
+        cacheLocation = QCoreApplication::applicationDirPath() + "/data/cache";
+#else
+        cacheLocation = QStandardPaths::writableLocation(QStandardPaths::CacheLocation);
+#endif
+
         int changed = 0;
         // Named individually rather than sweeping the applications directory:
         // other applications' entries live there too and are not ours to touch.
@@ -533,12 +540,7 @@ int main(int argc, char *argv[])
                  config + QStringLiteral("/mimeapps.list"),
                  QSettings().fileName(),
                  QFileInfo(QSettings().fileName()).absolutePath(),
-                 #ifdef IMAGER_PORTABLE
-                 QCoreApplication::applicationDirPath() + "/data/cache"
-#else
-                 QStandardPaths::writableLocation(QStandardPaths::CacheLocation)
-#endif
-                 ,
+                 cacheLocation
              }) {
             changed += rpi_imager::restoreUserOwnership(path);
         }
@@ -548,12 +550,7 @@ int main(int argc, char *argv[])
         int gid = -1;
         if (PlatformQuirks::invokingUser(&uid, &gid))
             changed += PlatformQuirks::reclaimOwnership(
-                QFileInfo(#ifdef IMAGER_PORTABLE
-                 QCoreApplication::applicationDirPath() + "/data/cache"
-#else
-                 QStandardPaths::writableLocation(QStandardPaths::CacheLocation)
-#endif)
-                    .absolutePath(), uid, gid, false);
+                QFileInfo(cacheLocation).absolutePath(), uid, gid, false);
         if (changed > 0)
             qDebug() << "Handed" << changed << "file(s) back to the invoking user";
     };
