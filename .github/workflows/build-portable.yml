@@ -26,7 +26,7 @@ jobs:
         
     - name: Configure CMake
       run: |
-        cmake -B build -G Ninja `
+        cmake src -B build -G Ninja `
           -DCMAKE_BUILD_TYPE=MinSizeRel `
           -DENABLE_INNO_INSTALLER=OFF `
           -DIMAGER_PORTABLE=ON
@@ -45,3 +45,4 @@ jobs:
       with:
         name: piflash-portable-win64
         path: PiFlash-Portable-win64.zip
+
