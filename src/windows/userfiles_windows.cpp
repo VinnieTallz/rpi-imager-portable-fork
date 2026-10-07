@@ -7,6 +7,7 @@
 
 #include <QFile>
 #include <QStandardPaths>
+#include <QCoreApplication>
 
 #include <vector>
 #include <windows.h>
@@ -141,4 +142,5 @@ QString trustedCacheLocation()
 }
 
 } // namespace PlatformQuirks
+
 
