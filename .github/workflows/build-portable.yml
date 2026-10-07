@@ -17,7 +17,7 @@ jobs:
     - name: Install Qt
       uses: jurplel/install-qt-action@v4
       with:
-        version: '6.11.2'
+        version: '6.9.2'
         host: 'windows'
         target: 'desktop'
         arch: 'win64_mingw'
@@ -45,5 +45,6 @@ jobs:
       with:
         name: piflash-portable-win64
         path: PiFlash-Portable-win64.zip
+
 
 
