@@ -1,0 +1,47 @@
+name: Build Portable Windows
+on:
+  push:
+    branches: [ portable ]
+  pull_request:
+    branches: [ portable ]
+  workflow_dispatch:
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        submodules: recursive
+
+    - name: Install Qt
+      uses: jurplel/install-qt-action@v4
+      with:
+        version: '6.8.0' # Adjusting to latest supported or 6.11 if available (jurplel usually handles this)
+        host: 'windows'
+        target: 'desktop'
+        arch: 'win64_mingw'
+        install-deps: 'true'
+        modules: 'qt5compat qtimageformats'
+        
+    - name: Configure CMake
+      run: |
+        cmake -B build -G Ninja `
+          -DCMAKE_BUILD_TYPE=MinSizeRel `
+          -DENABLE_INNO_INSTALLER=OFF `
+          -DIMAGER_PORTABLE=ON
+          
+    - name: Build
+      run: cmake --build build --config MinSizeRel
+
+    - name: Prepare Portable Zip
+      run: |
+        # deploy directory is populated by windeployqt in post-build step
+        cd build/deploy
+        Compress-Archive -Path * -DestinationPath ../../PiFlash-Portable-win64.zip
+
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: piflash-portable-win64
+        path: PiFlash-Portable-win64.zip

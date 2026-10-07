@@ -133,7 +133,12 @@ int reclaimOwnership(const QString&, int, int, bool) { return 0; }
 
 QString trustedCacheLocation()
 {
+    #ifdef IMAGER_PORTABLE
+    return QCoreApplication::applicationDirPath() + "/data/cache";
+#else
     return QStandardPaths::writableLocation(QStandardPaths::CacheLocation);
+#endif
 }
 
 } // namespace PlatformQuirks
+

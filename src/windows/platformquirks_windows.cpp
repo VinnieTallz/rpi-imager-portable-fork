@@ -29,6 +29,8 @@
 #include <QFile>
 #include <QProcessEnvironment>
 #include <QDir>
+#include <QSettings>
+#include <QCoreApplication>
 
 namespace {
     // Network monitoring state
@@ -536,8 +538,15 @@ bool openUrlExternally(const QUrl& url) {
 }
 
 bool registerUriScheme() {
-    // The rpi-imager:// scheme association is written to the registry by the
-    // installer at install time, so there is nothing to do at runtime.
+#ifdef IMAGER_PORTABLE
+    QString exePath = QCoreApplication::applicationDirPath() + "/rpi-imager-callback-relay.exe";
+    exePath.replace("/", "\\");
+    QSettings reg("HKEY_CURRENT_USER\\Software\\Classes\\rpi-imager", QSettings::NativeFormat);
+    reg.setValue(".", "URL:Raspberry Pi Imager");
+    reg.setValue("URL Protocol", "");
+    QSettings regCmd("HKEY_CURRENT_USER\\Software\\Classes\\rpi-imager\\shell\\open\\command", QSettings::NativeFormat);
+    regCmd.setValue(".", QString("\"%1\" \"%2\"").arg(exePath, "%1"));
+#endif
     return true;
 }
 
@@ -1059,3 +1068,5 @@ NativePermissionScope::NativePermissionScope() { qEnableNtfsPermissionChecks(); 
 NativePermissionScope::~NativePermissionScope() { qDisableNtfsPermissionChecks(); }
 
 } // namespace PlatformQuirks
+
+

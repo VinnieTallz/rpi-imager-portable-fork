@@ -536,5 +536,10 @@ bool CacheVerificationWorker::ensureCacheDirectoryExists()
 
 QString CacheVerificationWorker::getCacheDirectory() const
 {
+    #ifdef IMAGER_PORTABLE
+    return QCoreApplication::applicationDirPath() + "/data/cache";
+#else
     return QStandardPaths::writableLocation(QStandardPaths::CacheLocation);
+#endif
 }
+

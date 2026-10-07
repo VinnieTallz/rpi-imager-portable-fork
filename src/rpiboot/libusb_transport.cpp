@@ -9,6 +9,9 @@
 #include <stdexcept>
 #include <thread>
 #include <QDebug>
+#include <QProcess>
+#include <QCoreApplication>
+#include <QThread>
 
 namespace rpiboot {
 
@@ -121,7 +124,17 @@ std::unique_ptr<IUsbTransport> LibusbContext::openDevice(const UsbDeviceInfo& in
         if (libusb_get_bus_number(list[i]) == info.busNumber &&
             libusb_get_device_address(list[i]) == info.deviceAddress) {
 
-            int rc = libusb_open(list[i], &handle);
+                        int rc = libusb_open(list[i], &handle);
+#if defined(_WIN32) && defined(IMAGER_PORTABLE)
+            if (rc == LIBUSB_ERROR_NOT_SUPPORTED) {
+                qDebug() << "WinUSB driver not supported. Attempting to install rpiboot driver...";
+                QString infPath = QCoreApplication::applicationDirPath() + "/rpiboot-winusb.inf";
+                infPath.replace("/", "\\");
+                QProcess::execute("pnputil.exe", {"/add-driver", infPath, "/install"});
+                QThread::sleep(2);
+                rc = libusb_open(list[i], &handle);
+            }
+#endif
             if (rc != LIBUSB_SUCCESS)
                 handle = nullptr;
             break;
@@ -355,3 +368,4 @@ bool LibusbTransport::isOpen() const
 }
 
 } // namespace rpiboot
+

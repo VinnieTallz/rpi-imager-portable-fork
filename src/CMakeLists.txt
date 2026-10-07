@@ -5,6 +5,11 @@ include(cmake/GeneratedResource.cmake)
 
 cmake_minimum_required(VERSION 3.22)
 OPTION (ENABLE_CHECK_VERSION "Check for version updates" ON)
+option(IMAGER_PORTABLE "Build as portable application (no installer needed)" OFF)
+if(IMAGER_PORTABLE)
+    add_definitions(-DIMAGER_PORTABLE=1)
+endif()
+
 OPTION (ENABLE_TELEMETRY "Enable sending telemetry" ON)
 OPTION (BUILD_EMBEDDED "Build for Embedded Imager" OFF)
 OPTION (BUILD_CLI_ONLY "Build CLI-only version without GUI components" OFF)
@@ -553,7 +558,7 @@ endif()
 # Note: Icon Composer compilation for macOS dark mode icons is handled in
 # mac/PlatformPackaging.cmake as a POST_BUILD step after macdeployqt runs
 
-if(ENABLE_TELEMETRY)
+if(ENABLE_TELEMETRY AND NOT IMAGER_PORTABLE)
     add_definitions(-DTELEMETRY_ENABLED_DEFAULT=true)
 else()
     add_definitions(-DTELEMETRY_ENABLED_DEFAULT=false)
@@ -717,3 +722,5 @@ endif()
 if(RPI_IMAGER_FUZZERS)
     add_subdirectory(test/fuzz)
 endif()
+
+

@@ -1,0 +1,33 @@
+name: Sync Upstream
+on:
+  schedule:
+    - cron: '0 0 * * 0' # Run weekly on Sundays
+  workflow_dispatch:
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        ref: portable
+        fetch-depth: 0
+
+    - name: Configure Git
+      run: |
+        git config user.name "GitHub Action"
+        git config user.email "action@github.com"
+
+    - name: Fetch Upstream
+      run: |
+        git remote add upstream https://github.com/raspberrypi/rpi-imager.git
+        git fetch upstream
+
+    - name: Rebase and Push
+      run: |
+        # Try to rebase our portable branch on top of upstream's qml branch (their default)
+        git rebase upstream/qml || {
+          echo "Rebase conflict! Please resolve manually."
+          exit 1
+        }
+        git push -f origin portable

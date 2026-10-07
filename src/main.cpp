@@ -397,7 +397,15 @@ int main(int argc, char *argv[])
 
     app.setOrganizationName("Raspberry Pi");
     app.setOrganizationDomain("raspberrypi.com");
+    #ifdef IMAGER_PORTABLE
+    app.setApplicationName("PiFlash Portable");
+    // Force portable INI format inside the application directory
+    QSettings::setDefaultFormat(QSettings::IniFormat);
+    QSettings::setPath(QSettings::IniFormat, QSettings::UserScope, QCoreApplication::applicationDirPath() + "/data");
+    QSettings::setPath(QSettings::IniFormat, QSettings::SystemScope, QCoreApplication::applicationDirPath() + "/data");
+#else
     app.setApplicationName("Raspberry Pi Imager");
+#endif
     app.setApplicationVersion(ImageWriter::staticVersion());
     {
         const auto source = PlatformQuirks::windowIconSource();
@@ -525,7 +533,12 @@ int main(int argc, char *argv[])
                  config + QStringLiteral("/mimeapps.list"),
                  QSettings().fileName(),
                  QFileInfo(QSettings().fileName()).absolutePath(),
-                 QStandardPaths::writableLocation(QStandardPaths::CacheLocation),
+                 #ifdef IMAGER_PORTABLE
+                 QCoreApplication::applicationDirPath() + "/data/cache"
+#else
+                 QStandardPaths::writableLocation(QStandardPaths::CacheLocation)
+#endif
+                 ,
              }) {
             changed += rpi_imager::restoreUserOwnership(path);
         }
@@ -535,7 +548,11 @@ int main(int argc, char *argv[])
         int gid = -1;
         if (PlatformQuirks::invokingUser(&uid, &gid))
             changed += PlatformQuirks::reclaimOwnership(
-                QFileInfo(QStandardPaths::writableLocation(QStandardPaths::CacheLocation))
+                QFileInfo(#ifdef IMAGER_PORTABLE
+                 QCoreApplication::applicationDirPath() + "/data/cache"
+#else
+                 QStandardPaths::writableLocation(QStandardPaths::CacheLocation)
+#endif)
                     .absolutePath(), uid, gid, false);
         if (changed > 0)
             qDebug() << "Handed" << changed << "file(s) back to the invoking user";
@@ -1249,3 +1266,6 @@ int main(int argc, char *argv[])
     return rc;
 #endif /* !CLI_ONLY_BUILD */
 }
+
+
+
