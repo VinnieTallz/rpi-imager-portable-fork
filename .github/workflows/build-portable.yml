@@ -14,7 +14,11 @@ jobs:
       with:
         submodules: recursive
 
-    - name: Install Qt
+    # Qt's prebuilt MinGW binaries must be linked with the same toolchain they
+    # were built with (MinGW 13.1, per BUILDING.md). The runner's preinstalled
+    # C:\mingw64 (GCC 15) uses a different CRT and fails to link
+    # libQt6EntryPoint (undefined reference to __imp___argc).
+    - name: Install Qt + MinGW 13.1 toolchain
       uses: jurplel/install-qt-action@v4
       with:
         version: '6.9.2'
@@ -23,18 +27,39 @@ jobs:
         arch: 'win64_mingw'
         install-deps: 'true'
         modules: 'qt5compat qtimageformats'
-        
+        tools: 'tools_mingw1310,qt.tools.win64_mingw1310'
+
+    - name: Put Qt MinGW first on PATH
+      shell: pwsh
+      run: |
+        $tools = if ($env:IQTA_TOOLS) { $env:IQTA_TOOLS } else { Join-Path $env:RUNNER_WORKSPACE 'Qt\Tools' }
+        $mingw = Join-Path $tools 'mingw1310_64'
+        if (-not (Test-Path "$mingw\bin\g++.exe")) { throw "MinGW toolchain not found at $mingw" }
+        "$mingw\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+        "MINGW64_ROOT=$($mingw -replace '\\','/')" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+
+    - name: Verify toolchain
+      shell: pwsh
+      run: |
+        (Get-Command g++).Source
+        g++ --version
+
     - name: Configure CMake
+      shell: pwsh
       run: |
         cmake src -B build -G Ninja `
           -DCMAKE_BUILD_TYPE=MinSizeRel `
+          -DCMAKE_C_COMPILER="$env:MINGW64_ROOT/bin/gcc.exe" `
+          -DCMAKE_CXX_COMPILER="$env:MINGW64_ROOT/bin/g++.exe" `
+          -DMINGW64_ROOT="$env:MINGW64_ROOT" `
           -DENABLE_INNO_INSTALLER=OFF `
           -DIMAGER_PORTABLE=ON
-          
+
     - name: Build
       run: cmake --build build --config MinSizeRel
 
     - name: Prepare Portable Zip
+      shell: pwsh
       run: |
         # deploy directory is populated by windeployqt in post-build step
         cd build/deploy
@@ -45,6 +70,3 @@ jobs:
       with:
         name: piflash-portable-win64
         path: PiFlash-Portable-win64.zip
-
-
-

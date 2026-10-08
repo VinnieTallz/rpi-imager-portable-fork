@@ -124,7 +124,7 @@ std::unique_ptr<IUsbTransport> LibusbContext::openDevice(const UsbDeviceInfo& in
         if (libusb_get_bus_number(list[i]) == info.busNumber &&
             libusb_get_device_address(list[i]) == info.deviceAddress) {
 
-                        int rc = libusb_open(list[i], &handle);
+            int rc = libusb_open(list[i], &handle);
 #if defined(_WIN32) && defined(IMAGER_PORTABLE)
             if (rc == LIBUSB_ERROR_NOT_SUPPORTED) {
                 qDebug() << "WinUSB driver not supported. Attempting to install rpiboot driver...";
