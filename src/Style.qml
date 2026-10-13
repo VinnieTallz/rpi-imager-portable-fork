@@ -26,77 +26,84 @@ Item {
     // Scale a base value by the text scaling factor, rounding to nearest int.
     function scaled(base) { return Math.round(base * textScale) }
 
-    // === COLORS ===
+    // === COLORS (Street Fighter Champion Edition) ===
     readonly property color mainBackgroundColor: "#ffffff"
-    readonly property color raspberryRed: "#ab1e3a"
+    // Hadouken & Chun-Li Royal Blue (replaces trademark Raspberry Pink)
+    readonly property color streetFighterBlue: "#1e40af"
+    // Arcade Champion Gold
+    readonly property color streetFighterGold: "#d97706"
+    // Hadouken Electric Blue
+    readonly property color streetFighterElectricBlue: "#2563eb"
+    // Compatibility alias for existing QML bindings
+    readonly property color raspberryRed: streetFighterBlue
     readonly property color transparent: "transparent"
 
     readonly property color buttonBackgroundColor: mainBackgroundColor
-    readonly property color buttonForegroundColor: raspberryRed
-    readonly property color buttonFocusedBackgroundColor: "#d1dcfb"
-    readonly property color buttonHoveredBackgroundColor: "#f2f2f2"
+    readonly property color buttonForegroundColor: streetFighterBlue
+    readonly property color buttonFocusedBackgroundColor: "#dbeafe"
+    readonly property color buttonHoveredBackgroundColor: "#f1f5f9"
 
-    readonly property color button2BackgroundColor: raspberryRed
+    readonly property color button2BackgroundColor: streetFighterBlue
     readonly property color button2ForegroundColor: mainBackgroundColor
     // Focused: noticeably darker for strong state indication (keyboard focus)
-    readonly property color button2FocusedBackgroundColor: "#8f122c"
+    readonly property color button2FocusedBackgroundColor: "#172554"
     // Hovered: noticeably lighter to differentiate from base (≥4.5:1 contrast vs base)
-    readonly property color button2HoveredBackgroundColor: "#eac7ce"
-    // Hovered foreground should be Raspberry Red for ≥4.5:1 contrast on the light hover bg
-    readonly property color button2HoveredForegroundColor: raspberryRed
-    readonly property color raspberryRedHighlight: "#d64561"
+    readonly property color button2HoveredBackgroundColor: "#dbeafe"
+    // Hovered foreground should be primary blue for ≥4.5:1 contrast on the light hover bg
+    readonly property color button2HoveredForegroundColor: streetFighterBlue
+    readonly property color raspberryRedHighlight: streetFighterElectricBlue
 
-    readonly property color titleBackgroundColor: "#f5f5f5"
-    readonly property color titleSeparatorColor: "#afafaf"
-    readonly property color popupBorderColor: "#dcdcdc"
+    readonly property color titleBackgroundColor: "#f8fafc"
+    readonly property color titleSeparatorColor: "#cbd5e1"
+    readonly property color popupBorderColor: "#e2e8f0"
 
     readonly property color listViewRowBackgroundColor: "#ffffff"
-    readonly property color listViewHoverRowBackgroundColor: titleBackgroundColor
+    readonly property color listViewHoverRowBackgroundColor: "#f1f5f9"
     // Selection highlight color for OS/device lists
-    readonly property color listViewHighlightColor: "#BACCE7"
+    readonly property color listViewHighlightColor: "#bfdbfe"
 
     // Utility translucent colors
     readonly property color translucentWhite10: Qt.rgba(255, 255, 255, 0.1)
     readonly property color translucentWhite30: Qt.rgba(255, 255, 255, 0.3)
 
     // descriptions in list views
-    readonly property color textDescriptionColor: "#1a1a1a"
+    readonly property color textDescriptionColor: "#1e293b"
     // Sidebar colors
-    readonly property color sidebarActiveBackgroundColor: raspberryRed
+    readonly property color sidebarActiveBackgroundColor: streetFighterBlue
     readonly property color sidebarTextOnActiveColor: "#FFFFFF"
-    readonly property color sidebarTextOnInactiveColor: raspberryRed
-    readonly property color sidebarTextDisabledColor: "#E0E0E0"
+    readonly property color sidebarTextOnInactiveColor: streetFighterBlue
+    readonly property color sidebarTextDisabledColor: "#94a3b8"
     // Sidebar controls
-    readonly property color sidebarControlBorderColor: "#767676"
-    readonly property color sidebarBackgroundColour: mainBackgroundColor
-    readonly property color sidebarBorderColour: raspberryRed
+    readonly property color sidebarControlBorderColor: "#64748b"
+    readonly property color sidebarBackgroundColour: "#f8fafc"
+    readonly property color sidebarBorderColour: "#e2e8f0"
 
     // OS metadata
-    readonly property color textMetadataColor: "#646464"
+    readonly property color textMetadataColor: "#64748b"
 
     // for the "device / OS / storage" titles
     readonly property color subtitleColor: "#ffffff"
 
     readonly property color progressBarTextColor: "white"
-    readonly property color progressBarVerifyForegroundColor: "#6cc04a"
-    readonly property color progressBarBackgroundColor: raspberryRed
-    // New: distinct colors for writing vs verification phases
-    readonly property color progressBarWritingForegroundColor: raspberryRed
+    readonly property color progressBarVerifyForegroundColor: "#10b981"
+    readonly property color progressBarBackgroundColor: streetFighterBlue
+    // Distinct colors for writing vs verification phases
+    readonly property color progressBarWritingForegroundColor: streetFighterBlue
     readonly property color progressBarTrackColor: titleBackgroundColor
 
-    readonly property color lanbarBackgroundColor: "#ffffe3"
+    readonly property color lanbarBackgroundColor: "#fef3c7"
 
     /// the check-boxes/radio-buttons have labels that might be disabled
-    readonly property color formLabelColor: "black"
-    readonly property color formLabelErrorColor: "red"
-    readonly property color formLabelDisabledColor: "grey"
+    readonly property color formLabelColor: "#0f172a"
+    readonly property color formLabelErrorColor: "#ef4444"
+    readonly property color formLabelDisabledColor: "#94a3b8"
     // Active color for radio buttons, checkboxes, and switches
-    readonly property color formControlActiveColor: "#1955AE"
+    readonly property color formControlActiveColor: streetFighterBlue
 
     readonly property color embeddedModeInfoTextColor: "#ffffff"
 
-    // Focus/outline
-    readonly property color focusOutlineColor: "#0078d4"
+    // Focus/outline - Arcade Champion Gold focus ring
+    readonly property color focusOutlineColor: streetFighterGold
     readonly property int focusOutlineWidth: 2
     readonly property int focusOutlineRadius: 4
     readonly property int focusOutlineMargin: -4

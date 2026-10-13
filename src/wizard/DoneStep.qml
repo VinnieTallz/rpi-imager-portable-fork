@@ -15,7 +15,7 @@ import RpiImager
 WizardStepBase {
     id: root
     
-    title: qsTr("Write complete!")
+    title: qsTr("Write complete! [Round Won]")
     showBackButton: false
     showNextButton: false
     readonly property var ejectState: ImageWriterSingleton.ejectState
@@ -256,6 +256,16 @@ WizardStepBase {
                 font.family: Style.fontFamily
                 color: root.ejectInProgress || root.ejectState === ImageWriterSingleton.EjectFailed ? Style.formLabelColor : Style.textDescriptionColor
                 font.bold: root.ejectInProgress || root.ejectState === ImageWriterSingleton.EjectFailed
+                Layout.fillWidth: true
+                horizontalAlignment: Text.AlignHCenter
+                wrapMode: Text.WordWrap
+            }
+
+            Text {
+                text: qsTr("PiFlash Portable is an independent community fork based on Raspberry Pi Imager (Apache 2.0). Not affiliated with Raspberry Pi Ltd.")
+                font.pointSize: Style.fontSizeCaption
+                font.family: Style.fontFamily
+                color: Style.textMetadataColor
                 Layout.fillWidth: true
                 horizontalAlignment: Text.AlignHCenter
                 wrapMode: Text.WordWrap

@@ -482,15 +482,25 @@ Item {
                 // Header
                 Text {
                     id: sidebarHeader
-                    text: qsTr("Setup steps")
+                    text: qsTr("PiFlash Portable")
                     font.pointSize: Style.fontSizeHeading
                     font.family: Style.fontFamilyBold
                     font.bold: true
                     color: Style.sidebarTextOnInactiveColor
                     Layout.fillWidth: true
-                    Layout.bottomMargin: Style.spacingSmall
                     Accessible.role: Accessible.Heading
                     Accessible.name: text
+                }
+
+                Text {
+                    id: sidebarSubheader
+                    text: qsTr("CHAMPION FORK")
+                    font.pointSize: Style.fontSizeCaption
+                    font.family: Style.fontFamilyBold
+                    font.bold: true
+                    color: Style.streetFighterGold
+                    Layout.fillWidth: true
+                    Layout.bottomMargin: Style.spacingSmall
                 }
                 
                 // Step list

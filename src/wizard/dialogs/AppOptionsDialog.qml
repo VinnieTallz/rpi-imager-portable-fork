@@ -286,6 +286,34 @@ BaseDialog {
                     focusItem.activeFocusOnTab = true
                 }
             }
+
+            Rectangle {
+                Layout.fillWidth: true
+                height: 1
+                color: Style.popupBorderColor
+            }
+
+            ColumnLayout {
+                Layout.fillWidth: true
+                spacing: Style.spacingXXSmall
+
+                Text {
+                    text: qsTr("About PiFlash Portable [Champion Edition]")
+                    font.pointSize: Style.fontSizeSm
+                    font.family: Style.fontFamilyBold
+                    font.bold: true
+                    color: Style.streetFighterBlue
+                }
+
+                Text {
+                    text: qsTr("Independent, portable community fork based on Raspberry Pi Imager (Apache 2.0).\nSettings & cache stored in ./data directory. Not affiliated with Raspberry Pi Ltd.")
+                    font.pointSize: Style.fontSizeCaption
+                    font.family: Style.fontFamily
+                    color: Style.textMetadataColor
+                    wrapMode: Text.WordWrap
+                    Layout.fillWidth: true
+                }
+            }
         }
     }
 
