@@ -9,6 +9,8 @@ on:
 jobs:
   build-windows:
     runs-on: windows-latest
+    permissions:
+      contents: write
     steps:
     - uses: actions/checkout@v4
       with:
@@ -70,3 +72,25 @@ jobs:
       with:
         name: piflash-portable-win64
         path: PiFlash-Portable-win64.zip
+
+    - name: Publish GitHub Release
+      if: github.ref == 'refs/heads/portable'
+      uses: softprops/action-gh-release@v2
+      with:
+        tag_name: v2.0-portable
+        name: "PiFlash Portable [Champion Edition] v2.0"
+        body: |
+          ### PiFlash Portable [Champion Edition] v2.0
+          **Zero-Install Portable Flasher for Windows (x64)**
+
+          - **100% Standalone**: Runs anywhere without an installer or driver pre-setup.
+          - **Isolated Storage**: OS downloads, cache, and preferences stay strictly inside `./data`.
+          - **On-Demand RPIBoot**: Automatically configures the WinUSB driver for Compute Module & RP2040/RP2350 recovery when missing.
+          - **Street Fighter Champion Edition Styling**: Royal blue and arcade gold theme with distinct community fork branding.
+          - **Privacy Focused**: Telemetry and usage statistics are disabled by default.
+
+          *Notice: PiFlash Portable is an independent community fork based on Raspberry Pi Imager (Apache 2.0). Not affiliated with or endorsed by Raspberry Pi Ltd.*
+        files: PiFlash-Portable-win64.zip
+        prerelease: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
